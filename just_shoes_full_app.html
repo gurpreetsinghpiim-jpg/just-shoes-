@@ -1,0 +1,486 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+input,select,textarea{font-family:inherit}
+.app{padding-bottom:2rem}
+
+.hdr{padding:1rem 0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:var(--color-text-primary);border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;color:var(--color-background-primary);font-size:17px}
+.logo-txt{font-size:19px;font-weight:500;color:var(--color-text-primary)}
+.logo-txt span{color:var(--color-text-tertiary);font-weight:400}
+.hdr-right{display:flex;gap:8px;align-items:center}
+.cart-btn{display:flex;align-items:center;gap:6px;padding:6px 13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary)}
+.cnt-badge{background:var(--color-text-primary);color:var(--color-background-primary);border-radius:20px;padding:1px 7px;font-size:11px}
+
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
+.fb{padding:5px 13px;border:0.5px solid var(--color-border-secondary);border-radius:20px;font-size:13px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary)}
+.fb.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.srch{margin-left:auto;position:relative}
+.srch input{padding:5px 11px 5px 30px;border:0.5px solid var(--color-border-secondary);border-radius:20px;font-size:13px;background:var(--color-background-secondary);color:var(--color-text-primary);width:180px}
+.srch i{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--color-text-tertiary);font-size:14px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:13px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;cursor:pointer}
+.card:hover{border-color:var(--color-border-secondary)}
+.img-box{width:100%;aspect-ratio:1;overflow:hidden;background:#f5f4f0;position:relative}
+.img-box img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s}
+.card:hover .img-box img{transform:scale(1.05)}
+.bge{position:absolute;top:9px;left:9px;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.bge-new{background:#e8f5e9;color:#2e7d32}.bge-sale{background:#fce4ec;color:#b71c1c}.bge-hot{background:#fff3e0;color:#e65100}
+.cb{padding:10px 11px 12px}
+.cb-brand{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
+.cb-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:2px 0 6px;line-height:1.3}
+.cb-meta{display:flex;align-items:center;justify-content:space-between}
+.cb-price{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.old-p{font-size:11px;color:var(--color-text-tertiary);text-decoration:line-through;margin-left:4px}
+.cb-rating{font-size:11px;color:var(--color-text-tertiary);margin-top:3px}
+
+.page{display:none}
+.page.active{display:block}
+
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;padding:5px 0;margin-bottom:1rem;background:none;border:none}
+
+.pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.pdp-img{border-radius:var(--border-radius-lg);overflow:hidden;aspect-ratio:1;background:#f5f4f0}
+.pdp-img img{width:100%;height:100%;object-fit:cover;display:block}
+.pdp-brand{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.pdp-name{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;line-height:1.3}
+.pdp-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
+.pdp-price{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.pdp-old{font-size:14px;color:var(--color-text-tertiary);text-decoration:line-through}
+.pdp-save{font-size:11px;padding:2px 8px;border-radius:20px;background:#fce4ec;color:#b71c1c}
+.pdp-rating{font-size:12px;color:var(--color-text-secondary);margin-bottom:12px}
+.pdp-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:14px}
+.spec-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
+.spec-cell{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px}
+.spec-lbl{font-size:11px;color:var(--color-text-tertiary);margin-bottom:1px}
+.spec-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.size-lbl{font-size:13px;color:var(--color-text-secondary);margin-bottom:7px}
+.size-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.sz{width:42px;height:34px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-primary)}
+.sz.sel{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.sz.err{border-color:#e24b4a}
+.pdp-actions{display:flex;gap:8px}
+.btn-primary{flex:1;padding:10px;background:var(--color-text-primary);color:var(--color-background-primary);border:none;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;font-weight:500}
+.btn-outline{padding:10px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary)}
+
+.cart-layout{display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start}
+.cart-items{}
+.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ci-img{width:72px;height:72px;border-radius:var(--border-radius-md);overflow:hidden;background:#f5f4f0;flex-shrink:0}
+.ci-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ci-info{flex:1;min-width:0}
+.ci-brand{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase}
+.ci-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:2px 0 4px}
+.ci-meta{font-size:12px;color:var(--color-text-secondary)}
+.ci-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.ci-price{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.ci-remove{font-size:12px;color:var(--color-text-tertiary);cursor:pointer;background:none;border:none;padding:0}
+.qty-ctrl{display:flex;align-items:center;gap:6px}
+.qty-btn{width:26px;height:26px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:14px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-primary);display:flex;align-items:center;justify-content:center}
+.qty-val{font-size:13px;min-width:16px;text-align:center;color:var(--color-text-primary)}
+.order-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;position:sticky;top:0}
+.oc-title{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:14px}
+.oc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--color-text-secondary);margin-bottom:8px}
+.oc-row.total{font-size:15px;font-weight:500;color:var(--color-text-primary);border-top:0.5px solid var(--color-border-tertiary);padding-top:10px;margin-top:6px}
+.empty-cart{text-align:center;padding:3rem;color:var(--color-text-secondary);font-size:14px}
+
+.checkout-layout{display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start}
+.section-title{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px}
+.form-group{margin-bottom:12px}
+.form-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:5px;display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.pm{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:11px 12px;cursor:pointer;display:flex;align-items:center;gap:9px;background:var(--color-background-primary)}
+.pm.sel{border:2px solid var(--color-text-primary)}
+.pm-icon{width:30px;height:30px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--color-text-secondary);flex-shrink:0}
+.pm-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.pm-sub{font-size:11px;color:var(--color-text-tertiary)}
+.card-fields{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:14px}
+.upi-fields{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:14px}
+.cod-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:14px;font-size:13px;color:var(--color-text-secondary);line-height:1.6}
+.netbank-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}
+.nb{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 7px;cursor:pointer;text-align:center;background:var(--color-background-primary)}
+.nb.sel{border:2px solid var(--color-text-primary);background:var(--color-background-secondary)}
+.nb-name{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+
+.success-screen{text-align:center;padding:2.5rem 1rem}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--color-background-success);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:28px;color:var(--color-text-success)}
+.success-title{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.success-sub{font-size:14px;color:var(--color-text-secondary);margin-bottom:1.5rem}
+.order-summary-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;max-width:400px;margin:0 auto 1.5rem;text-align:left}
+.os-row{display:flex;justify-content:space-between;font-size:13px;color:var(--color-text-secondary);padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.os-row:last-child{border-bottom:none;font-weight:500;color:var(--color-text-primary);font-size:14px}
+.track-steps{display:flex;justify-content:space-between;align-items:center;max-width:400px;margin:0 auto 1.5rem;position:relative}
+.track-line{position:absolute;top:14px;left:10%;width:80%;height:1px;background:var(--color-border-secondary)}
+.ts{display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;z-index:1}
+.ts-dot{width:28px;height:28px;border-radius:50%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--color-text-tertiary)}
+.ts-dot.done{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success)}
+.ts-lbl{font-size:11px;color:var(--color-text-tertiary)}
+.no-results{text-align:center;padding:3rem;color:var(--color-text-secondary);font-size:14px}
+</style>
+
+<h2 class="sr-only">Just Shoes — shop, cart, checkout, and order confirmation</h2>
+<div class="app">
+
+<div class="hdr">
+  <div class="logo">
+    <div class="logo-mark"><i class="ti ti-shoe" aria-hidden="true"></i></div>
+    <div class="logo-txt" style="cursor:pointer" onclick="goPage('shop')">Just <span>Shoes</span></div>
+  </div>
+  <div class="hdr-right">
+    <button class="cart-btn" onclick="goPage('cart')">
+      <i class="ti ti-shopping-bag" aria-hidden="true" style="font-size:15px"></i> Cart
+      <span class="cnt-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</div>
+
+<div class="page active" id="page-shop">
+  <div class="filters">
+    <button class="fb active" onclick="setFilter('All',this)">All</button>
+    <button class="fb" onclick="setFilter('Running',this)">Running</button>
+    <button class="fb" onclick="setFilter('Casual',this)">Casual</button>
+    <button class="fb" onclick="setFilter('Basketball',this)">Basketball</button>
+    <button class="fb" onclick="setFilter('Training',this)">Training</button>
+    <div class="srch"><i class="ti ti-search" aria-hidden="true"></i><input type="text" placeholder="Search…" oninput="setSearch(this.value)"></div>
+  </div>
+  <div class="grid" id="shopGrid"></div>
+  <div class="no-results" id="noR" style="display:none">No shoes found.</div>
+</div>
+
+<div class="page" id="page-pdp">
+  <button class="back-btn" onclick="goPage('shop')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back to shop</button>
+  <div class="pdp-layout">
+    <div class="pdp-img"><img id="pdpImg" src="" alt=""></div>
+    <div>
+      <p class="pdp-brand" id="pdpBrand"></p>
+      <p class="pdp-name" id="pdpName"></p>
+      <div class="pdp-price-row"><span class="pdp-price" id="pdpPrice"></span><span class="pdp-old" id="pdpOld"></span><span class="pdp-save" id="pdpSave" style="display:none"></span></div>
+      <p class="pdp-rating" id="pdpRating"></p>
+      <p class="pdp-desc" id="pdpDesc"></p>
+      <div class="spec-row" id="pdpSpecs"></div>
+      <p class="size-lbl">Select size (UK)</p>
+      <div class="size-row" id="pdpSizes"></div>
+      <div class="pdp-actions">
+        <button class="btn-primary" onclick="addToCart()"><i class="ti ti-shopping-cart" aria-hidden="true" style="margin-right:6px"></i>Add to cart</button>
+        <button class="btn-outline" onclick="buyNow()">Buy now</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-cart">
+  <button class="back-btn" onclick="goPage('shop')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Continue shopping</button>
+  <div id="cartContent"></div>
+</div>
+
+<div class="page" id="page-checkout">
+  <button class="back-btn" onclick="goPage('cart')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back to cart</button>
+  <div class="checkout-layout">
+    <div>
+      <p class="section-title">Delivery address</p>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">First name</label><input type="text" id="fName" placeholder="Arjun"></div>
+        <div class="form-group"><label class="form-label">Last name</label><input type="text" id="lName" placeholder="Sharma"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Phone number</label><input type="text" id="phone" placeholder="+91 98765 43210"></div>
+      <div class="form-group"><label class="form-label">Address line 1</label><input type="text" id="addr1" placeholder="House / flat no., street"></div>
+      <div class="form-group"><label class="form-label">Address line 2</label><input type="text" id="addr2" placeholder="Area, locality (optional)"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">City</label><input type="text" id="city" placeholder="Chandigarh"></div>
+        <div class="form-group"><label class="form-label">PIN code</label><input type="text" id="pin" placeholder="160001"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">State</label>
+        <select id="state">
+          <option value="">Select state</option>
+          <option>Punjab</option><option>Haryana</option><option>Delhi</option><option>Maharashtra</option><option>Karnataka</option><option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Rajasthan</option><option>Gujarat</option><option>West Bengal</option>
+        </select>
+      </div>
+
+      <p class="section-title" style="margin-top:1.5rem">Payment method</p>
+      <div class="pay-methods" id="payMethods">
+        <div class="pm sel" onclick="selPay('card',this)"><div class="pm-icon"><i class="ti ti-credit-card" aria-hidden="true"></i></div><div><div class="pm-name">Credit / Debit</div><div class="pm-sub">Visa, Mastercard, RuPay</div></div></div>
+        <div class="pm" onclick="selPay('upi',this)"><div class="pm-icon"><i class="ti ti-qrcode" aria-hidden="true"></i></div><div><div class="pm-name">UPI</div><div class="pm-sub">GPay, PhonePe, BHIM</div></div></div>
+        <div class="pm" onclick="selPay('netbank',this)"><div class="pm-icon"><i class="ti ti-building-bank" aria-hidden="true"></i></div><div><div class="pm-name">Net banking</div><div class="pm-sub">All major banks</div></div></div>
+        <div class="pm" onclick="selPay('cod',this)"><div class="pm-icon"><i class="ti ti-cash" aria-hidden="true"></i></div><div><div class="pm-name">Cash on delivery</div><div class="pm-sub">Pay when delivered</div></div></div>
+      </div>
+
+      <div id="payFields">
+        <div id="cardFields" class="card-fields">
+          <div class="form-group"><label class="form-label">Card number</label><input type="text" id="cardNum" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)"></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Expiry</label><input type="text" id="cardExp" placeholder="MM / YY" maxlength="7"></div>
+            <div class="form-group"><label class="form-label">CVV</label><input type="text" id="cardCvv" placeholder="•••" maxlength="4"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Name on card</label><input type="text" id="cardName" placeholder="Arjun Sharma"></div>
+        </div>
+        <div id="upiFields" class="upi-fields" style="display:none">
+          <div class="form-group"><label class="form-label">UPI ID</label><input type="text" id="upiId" placeholder="yourname@upi"></div>
+          <p style="font-size:12px;color:var(--color-text-tertiary);margin-top:4px">Or scan QR code at delivery</p>
+        </div>
+        <div id="netbankFields" style="display:none">
+          <div class="netbank-grid" id="nbGrid"></div>
+        </div>
+        <div id="codFields" class="cod-box" style="display:none">
+          <i class="ti ti-info-circle" aria-hidden="true" style="margin-right:6px;font-size:14px;vertical-align:-2px"></i>
+          Pay in cash when your order arrives. No advance payment required. Extra ₹49 COD fee applies.
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="order-card">
+        <p class="oc-title">Order summary</p>
+        <div id="checkoutSummary"></div>
+        <button class="btn-primary" style="width:100%;margin-top:14px" onclick="placeOrder()">
+          <i class="ti ti-lock" aria-hidden="true" style="margin-right:6px"></i>Place order
+        </button>
+        <p style="font-size:11px;color:var(--color-text-tertiary);text-align:center;margin-top:8px"><i class="ti ti-shield-check" aria-hidden="true" style="margin-right:3px;font-size:12px"></i>100% secure checkout</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-success">
+  <div class="success-screen">
+    <div class="success-icon"><i class="ti ti-check" aria-hidden="true"></i></div>
+    <p class="success-title">Order placed!</p>
+    <p class="success-sub" id="successSub">Your order #JS00000 has been confirmed</p>
+    <div class="track-steps">
+      <div class="track-line"></div>
+      <div class="ts"><div class="ts-dot done"><i class="ti ti-check" aria-hidden="true" style="font-size:12px"></i></div><div class="ts-lbl">Confirmed</div></div>
+      <div class="ts"><div class="ts-dot"><i class="ti ti-package" aria-hidden="true" style="font-size:12px"></i></div><div class="ts-lbl">Packed</div></div>
+      <div class="ts"><div class="ts-dot"><i class="ti ti-truck" aria-hidden="true" style="font-size:12px"></i></div><div class="ts-lbl">Shipped</div></div>
+      <div class="ts"><div class="ts-dot"><i class="ti ti-home" aria-hidden="true" style="font-size:12px"></i></div><div class="ts-lbl">Delivered</div></div>
+    </div>
+    <div class="order-summary-card" id="successDetails"></div>
+    <button class="btn-primary" style="padding:10px 28px" onclick="goPage('shop');cart=[];renderCartBadge()">
+      <i class="ti ti-shoe" aria-hidden="true" style="margin-right:7px"></i>Continue shopping
+    </button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const shoes=[
+  {id:1,brand:"Nike",name:"Air Max 270",cat:"Casual",price:12995,old:14995,badge:"Sale",rating:4.5,rev:2341,color:"Triple Black",material:"Mesh upper",weight:"310g",drop:"10mm",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80",desc:"Nike's first lifestyle Air Max built for all-day comfort. The 270° heel Air unit delivers a trampoline-like feel with a sleek running-inspired upper.",sizes:[6,7,7.5,8,8.5,9,9.5,10,11]},
+  {id:2,brand:"Adidas",name:"Ultraboost 23",cat:"Running",price:17999,old:null,badge:"New",rating:4.8,rev:1876,color:"Cloud White",material:"Primeknit+",weight:"290g",drop:"8mm",img:"https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&q=80",desc:"Built for serious runners. Primeknit+ upper wraps your foot perfectly and the full-length Boost midsole returns energy with every stride.",sizes:[6,7,8,9,10,11,12]},
+  {id:3,brand:"Air Jordan",name:"Jordan 1 Retro High OG",cat:"Basketball",price:15995,old:null,badge:"Hot",rating:4.9,rev:4512,color:"Chicago Red",material:"Full-grain leather",weight:"430g",drop:"0mm",img:"https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=600&q=80",desc:"The shoe that changed sneaker culture forever. Full-grain leather and the original Air-Sole unit — a cultural artifact and genuine performance shoe.",sizes:[7,7.5,8,8.5,9,9.5,10,11]},
+  {id:4,brand:"New Balance",name:"Fresh Foam X 1080v13",cat:"Running",price:16499,old:18499,badge:"Sale",rating:4.7,rev:987,color:"Navy/White",material:"Hypoknit",weight:"275g",drop:"6mm",img:"https://images.unsplash.com/photo-1539185441755-769473a23570?w=600&q=80",desc:"New Balance's most cushioned daily trainer. Nitrogen-infused Fresh Foam X midsole provides cloud-like cushioning for high-mileage runs.",sizes:[6,7,8,9,10,11]},
+  {id:5,brand:"Converse",name:"Chuck Taylor All Star '70",cat:"Casual",price:5995,old:null,badge:null,rating:4.6,rev:8901,color:"Optical White",material:"Canvas",weight:"220g",drop:"0mm",img:"https://images.unsplash.com/photo-1463100099107-aa0980c362e6?w=600&q=80",desc:"The All Star '70 elevates the original icon with premium canvas and extra cushioning. Vintage foxing tape and a cushy insole — the best Chuck ever.",sizes:[5,6,7,8,9,10,11,12]},
+  {id:6,brand:"Under Armour",name:"HOVR Phantom 3",cat:"Training",price:11995,old:13995,badge:"Sale",rating:4.4,rev:654,color:"Steel Grey",material:"UA WARP knit",weight:"298g",drop:"8mm",img:"https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=80",desc:"Zero-gravity feel meets smart connectivity. UA HOVR foam eliminates impact and built-in MapMyRun tracks your cadence automatically.",sizes:[7,8,9,10,11]},
+  {id:7,brand:"Puma",name:"Suede Classic XXI",cat:"Casual",price:7499,old:null,badge:"New",rating:4.3,rev:421,color:"Peacoat/White",material:"Suede leather",weight:"260g",drop:"0mm",img:"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&q=80",desc:"Since 1968, the Puma Suede has been the shoe of icons. The Classic XXI keeps every detail intact while adding a modern padded sockliner.",sizes:[6,7,8,9,10,11]},
+  {id:8,brand:"Nike",name:"React Infinity Run FK 4",cat:"Running",price:13995,old:null,badge:null,rating:4.6,rev:1234,color:"Volt/Black",material:"Flyknit",weight:"263g",drop:"9mm",img:"https://images.unsplash.com/photo-1580906853135-dbe0ba931abd?w=600&q=80",desc:"Designed to reduce injury. Wider base, rocker sole, and Nike React foam cushion every landing. Flyknit upper moves with your foot.",sizes:[7,7.5,8,8.5,9,9.5,10,11,12]},
+  {id:9,brand:"Skechers",name:"Go Walk 7",cat:"Training",price:5499,old:6999,badge:"Sale",rating:4.5,rev:3120,color:"Charcoal",material:"Knit mesh",weight:"195g",drop:"4mm",img:"https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=80",desc:"Ultra-lightweight knit mesh upper, Air-Cooled Goga Mat insole, and ULTRA GO midsole. Slip it on and forget you're wearing shoes.",sizes:[6,7,8,9,10,11,12]},
+  {id:10,brand:"Vans",name:"Old Skool Pro",cat:"Casual",price:5995,old:null,badge:"Hot",rating:4.7,rev:5634,color:"Black/White",material:"Suede/Canvas",weight:"240g",drop:"0mm",img:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&q=80",desc:"UltraCush HD footbed, Sickstick rubber outsole, reinforced toecap. The original sidestripe with skateboard-grade durability.",sizes:[5,6,7,8,9,10,11]},
+  {id:11,brand:"Asics",name:"Gel-Kayano 30",cat:"Running",price:14999,old:16999,badge:"Sale",rating:4.8,rev:876,color:"Indigo Blue",material:"Jacquard mesh",weight:"310g",drop:"10mm",img:"https://images.unsplash.com/photo-1511556820780-d912e42b4980?w=600&q=80",desc:"30 years of refinement. FF BLAST PLUS ECO midsole and PureGEL heel technology absorb shock silently. Perfect for long-distance training.",sizes:[6,7,8,9,10,11,12]},
+  {id:12,brand:"Reebok",name:"Classic Leather",cat:"Casual",price:6995,old:null,badge:null,rating:4.4,rev:2010,color:"Chalk/White",material:"Full-grain leather",weight:"280g",drop:"0mm",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&sat=-50",desc:"First worn in 1983, barely changed since. Buttery leather upper, die-cut EVA midsole, vintage logo. Timeless style that works with anything.",sizes:[6,7,8,9,10,11]}
+];
+
+const banks=[{name:"SBI",icon:"ti-building"},{name:"HDFC",icon:"ti-building"},{name:"ICICI",icon:"ti-building"},{name:"Axis",icon:"ti-building"},{name:"Kotak",icon:"ti-building"},{name:"PNB",icon:"ti-building"},{name:"BoB",icon:"ti-building"},{name:"Yes Bank",icon:"ti-building"}];
+
+let activeFilter='All', searchQ='', cart=[], curShoe=null, selSize=null, activePay='card', selBank=null;
+
+function fmt(n){return '₹'+Math.round(n).toLocaleString('en-IN');}
+
+function goPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  if(p==='cart')renderCart();
+  if(p==='checkout')renderCheckoutSummary();
+}
+
+function setFilter(f,btn){
+  activeFilter=f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderShop();
+}
+function setSearch(v){searchQ=v;renderShop();}
+
+function renderShop(){
+  const q=searchQ.toLowerCase();
+  const f=shoes.filter(s=>(activeFilter==='All'||s.cat===activeFilter)&&(s.name.toLowerCase().includes(q)||s.brand.toLowerCase().includes(q)));
+  const g=document.getElementById('shopGrid');
+  document.getElementById('noR').style.display=f.length?'none':'block';
+  if(!f.length){g.innerHTML='';return;}
+  const bc={Sale:'bge-sale',New:'bge-new',Hot:'bge-hot'};
+  g.innerHTML=f.map(s=>`<div class="card" onclick="openPdp(${s.id})" tabindex="0" role="button" aria-label="${s.brand} ${s.name}">
+    <div class="img-box"><img src="${s.img}" alt="${s.brand} ${s.name}" loading="lazy">${s.badge?`<span class="bge ${bc[s.badge]}">${s.badge}</span>`:''}</div>
+    <div class="cb"><p class="cb-brand">${s.brand}</p><p class="cb-name">${s.name}</p>
+    <div class="cb-meta"><span class="cb-price">${fmt(s.price)}${s.old?`<span class="old-p">${fmt(s.old)}</span>`:''}</span></div>
+    <p class="cb-rating"><i class="ti ti-star" aria-hidden="true" style="font-size:11px;color:#f4a825"></i> ${s.rating} (${s.rev.toLocaleString()})</p></div></div>`).join('');
+}
+
+function openPdp(id){
+  curShoe=shoes.find(s=>s.id===id); selSize=null;
+  const s=curShoe;
+  document.getElementById('pdpImg').src=s.img;
+  document.getElementById('pdpImg').alt=s.brand+' '+s.name;
+  document.getElementById('pdpBrand').textContent=s.brand;
+  document.getElementById('pdpName').textContent=s.name;
+  document.getElementById('pdpPrice').textContent=fmt(s.price);
+  const oldEl=document.getElementById('pdpOld'), saveEl=document.getElementById('pdpSave');
+  if(s.old){oldEl.textContent=fmt(s.old);const pct=Math.round((s.old-s.price)/s.old*100);saveEl.textContent=pct+'% off';saveEl.style.display='inline-block';}
+  else{oldEl.textContent='';saveEl.style.display='none';}
+  document.getElementById('pdpRating').innerHTML=`<i class="ti ti-star" aria-hidden="true" style="font-size:12px;color:#f4a825;margin-right:3px"></i>${s.rating} · ${s.rev.toLocaleString()} reviews · ${s.cat}`;
+  document.getElementById('pdpDesc').textContent=s.desc;
+  document.getElementById('pdpSpecs').innerHTML=[['Color',s.color],['Material',s.material],['Weight',s.weight],['Drop',s.drop]].map(([l,v])=>`<div class="spec-cell"><div class="spec-lbl">${l}</div><div class="spec-val">${v}</div></div>`).join('');
+  document.getElementById('pdpSizes').innerHTML=s.sizes.map(sz=>`<button class="sz" onclick="selSz(${sz},this)">${sz}</button>`).join('');
+  goPage('pdp');
+}
+
+function selSz(sz,btn){
+  selSize=sz;
+  document.querySelectorAll('.sz').forEach(b=>{b.classList.remove('sel','err');});
+  btn.classList.add('sel');
+}
+
+function requireSize(){
+  if(!selSize){document.querySelectorAll('.sz').forEach(b=>b.classList.add('err'));setTimeout(()=>document.querySelectorAll('.sz').forEach(b=>b.classList.remove('err')),900);return false;}
+  return true;
+}
+
+function addToCart(){
+  if(!requireSize())return;
+  const ex=cart.find(c=>c.id===curShoe.id&&c.size===selSize);
+  if(ex)ex.qty++;
+  else cart.push({...curShoe,size:selSize,qty:1});
+  renderCartBadge();
+  goPage('shop');
+}
+
+function buyNow(){
+  if(!requireSize())return;
+  const ex=cart.find(c=>c.id===curShoe.id&&c.size===selSize);
+  if(ex)ex.qty++;
+  else cart.push({...curShoe,size:selSize,qty:1});
+  renderCartBadge();
+  goPage('checkout');
+}
+
+function renderCartBadge(){
+  document.getElementById('cartBadge').textContent=cart.reduce((a,c)=>a+c.qty,0);
+}
+
+function renderCart(){
+  const el=document.getElementById('cartContent');
+  if(!cart.length){el.innerHTML='<div class="empty-cart"><i class="ti ti-shopping-bag" aria-hidden="true" style="font-size:32px;display:block;margin-bottom:12px;color:var(--color-text-tertiary)"></i>Your cart is empty</div>';return;}
+  const sub=cart.reduce((a,c)=>a+c.price*c.qty,0);
+  const del=sub>4999?0:99;
+  const total=sub+del;
+  el.innerHTML=`<div class="cart-layout">
+    <div class="cart-items">
+      ${cart.map((c,i)=>`<div class="cart-item">
+        <div class="ci-img"><img src="${c.img}" alt="${c.name}" loading="lazy"></div>
+        <div class="ci-info">
+          <p class="ci-brand">${c.brand}</p>
+          <p class="ci-name">${c.name}</p>
+          <p class="ci-meta">Size UK ${c.size} · ${c.color}</p>
+          <div class="qty-ctrl" style="margin-top:6px">
+            <button class="qty-btn" onclick="chgQty(${i},-1)">−</button>
+            <span class="qty-val">${c.qty}</span>
+            <button class="qty-btn" onclick="chgQty(${i},1)">+</button>
+          </div>
+        </div>
+        <div class="ci-right">
+          <span class="ci-price">${fmt(c.price*c.qty)}</span>
+          <button class="ci-remove" onclick="removeItem(${i})"><i class="ti ti-trash" aria-hidden="true" style="font-size:14px;color:var(--color-text-tertiary)"></i></button>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="order-card">
+      <p class="oc-title">Price details</p>
+      <div class="oc-row"><span>Subtotal (${cart.reduce((a,c)=>a+c.qty,0)} items)</span><span>${fmt(sub)}</span></div>
+      <div class="oc-row"><span>Delivery</span><span>${del===0?'<span style="color:var(--color-text-success)">Free</span>':fmt(del)}</span></div>
+      ${sub<4999?`<div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Add ${fmt(4999-sub)} more for free delivery</div>`:''}
+      <div class="oc-row total"><span>Total</span><span>${fmt(total)}</span></div>
+      <button class="btn-primary" style="width:100%;margin-top:14px" onclick="goPage('checkout')">Proceed to checkout <i class="ti ti-arrow-right" aria-hidden="true" style="margin-left:6px"></i></button>
+    </div>
+  </div>`;
+}
+
+function chgQty(i,d){
+  cart[i].qty+=d;
+  if(cart[i].qty<1)cart.splice(i,1);
+  renderCartBadge();
+  renderCart();
+}
+function removeItem(i){cart.splice(i,1);renderCartBadge();renderCart();}
+
+function selPay(method,btn){
+  activePay=method; selBank=null;
+  document.querySelectorAll('.pm').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById('cardFields').style.display=method==='card'?'block':'none';
+  document.getElementById('upiFields').style.display=method==='upi'?'block':'none';
+  document.getElementById('netbankFields').style.display=method==='netbank'?'block':'none';
+  document.getElementById('codFields').style.display=method==='cod'?'block':'none';
+}
+
+function renderCheckoutSummary(){
+  const sub=cart.reduce((a,c)=>a+c.price*c.qty,0);
+  const del=sub>4999?0:99;
+  const total=sub+del+(activePay==='cod'?49:0);
+  document.getElementById('checkoutSummary').innerHTML=
+    cart.map(c=>`<div class="oc-row"><span style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.brand} ${c.name} ×${c.qty}</span><span>${fmt(c.price*c.qty)}</span></div>`).join('')+
+    `<div class="oc-row"><span>Delivery</span><span>${del===0?'Free':fmt(del)}</span></div>`+
+    (activePay==='cod'?`<div class="oc-row"><span>COD fee</span><span>₹49</span></div>`:'')+
+    `<div class="oc-row total"><span>Total</span><span>${fmt(total)}</span></div>`;
+
+  const nbEl=document.getElementById('nbGrid');
+  if(nbEl&&!nbEl.innerHTML){
+    nbEl.innerHTML=banks.map((b,i)=>`<div class="nb" id="nb${i}" onclick="selNb(${i},this)"><i class="ti ti-building-bank" aria-hidden="true" style="font-size:18px;color:var(--color-text-secondary)"></i><div class="nb-name">${b.name}</div></div>`).join('');
+  }
+}
+
+function selNb(i,el){selBank=i;document.querySelectorAll('.nb').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+
+function fmtCard(inp){
+  let v=inp.value.replace(/\D/g,'').substring(0,16);
+  inp.value=v.replace(/(.{4})/g,'$1 ').trim();
+}
+
+function placeOrder(){
+  const fn=document.getElementById('fName').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  const addr=document.getElementById('addr1').value.trim();
+  const city=document.getElementById('city').value.trim();
+  const pin=document.getElementById('pin').value.trim();
+  if(!fn||!phone||!addr||!city||!pin){
+    alert('Please fill all required address fields.');return;
+  }
+  if(activePay==='netbank'&&selBank===null){alert('Please select a bank.');return;}
+  if(activePay==='upi'&&!document.getElementById('upiId').value.trim()){alert('Please enter UPI ID.');return;}
+  if(activePay==='card'){
+    const cn=document.getElementById('cardNum').value.replace(/\s/g,'');
+    if(cn.length<12){alert('Please enter a valid card number.');return;}
+  }
+
+  const ordId='JS'+Math.floor(10000+Math.random()*90000);
+  const sub=cart.reduce((a,c)=>a+c.price*c.qty,0);
+  const del=sub>4999?0:99;
+  const codFee=activePay==='cod'?49:0;
+  const total=sub+del+codFee;
+  const payLabels={card:'Credit/Debit card',upi:'UPI',netbank:'Net banking',cod:'Cash on delivery'};
+  const name=fn+' '+(document.getElementById('lName').value.trim());
+
+  document.getElementById('successSub').textContent=`Your order #${ordId} has been confirmed`;
+  document.getElementById('successDetails').innerHTML=
+    `<div class="os-row"><span>Order ID</span><span>#${ordId}</span></div>`+
+    `<div class="os-row"><span>Name</span><span>${name}</span></div>`+
+    `<div class="os-row"><span>Deliver to</span><span>${city} – ${pin}</span></div>`+
+    `<div class="os-row"><span>Payment</span><span>${payLabels[activePay]}</span></div>`+
+    `<div class="os-row"><span>Items</span><span>${cart.reduce((a,c)=>a+c.qty,0)}</span></div>`+
+    `<div class="os-row"><span>Total paid</span><span>${fmt(total)}</span></div>`+
+    `<div class="os-row"><span>Estimated delivery</span><span>3–5 business days</span></div>`;
+  goPage('success');
+}
+
+renderShop();
+</script>
